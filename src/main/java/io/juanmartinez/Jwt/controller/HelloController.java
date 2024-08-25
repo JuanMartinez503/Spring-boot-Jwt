@@ -1,4 +1,4 @@
-package io.juanmartinez.Jwt;
+package io.juanmartinez.Jwt.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.GetMapping;

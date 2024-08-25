@@ -1,4 +1,4 @@
-package io.juanmartinez.Jwt;
+package io.juanmartinez.Jwt.model;
 
 public class Student
 {
