@@ -22,10 +22,11 @@ public class UserService {
     AuthenticationManager authManager;
 
     private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
-    public User register (User user){
+    public String register (User user){
         //this is how you encode the password using spring security
         user.setPassword(encoder.encode(user.getPassword()));
-        return repo.save(user);
+        repo.save(user);
+        return jwtService.generateToken(user.getUsername());
 
     };
     public String verify (User user){
