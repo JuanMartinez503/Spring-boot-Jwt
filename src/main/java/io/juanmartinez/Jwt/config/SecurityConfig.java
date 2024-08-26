@@ -1,5 +1,6 @@
 package io.juanmartinez.Jwt.config;
 
+import io.juanmartinez.Jwt.filter.JwtFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,10 +19,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+    @Autowired
+    private JwtFilter jwtFilter;
 
     @Autowired
     private  UserDetailsService userDetailsService;
@@ -34,13 +39,16 @@ public class SecurityConfig {
         .authorizeHttpRequests(request->request.requestMatchers("register", "login")
                 .permitAll()
                 .anyRequest()
+
                 .authenticated())
         //you can enable the form login  .formLogin(Customizer.withDefaults()) enabling the form con sometimes lead to errors
 //
         // basic is to enable forms for testing of rest apis
         .httpBasic(Customizer.withDefaults())
 
-        .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).build();
+        .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                      .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                      .build();
 
     }
     //this is only an example
